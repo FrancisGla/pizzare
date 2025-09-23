@@ -159,9 +159,14 @@ nav a:hover {
 }
 
 /* Style pour le lien sans couleur bleue ni soulignement */
-.no-link-style {
-  color: var(--or-fonce);      /* prend la couleur du texte parent */
-  text-decoration: none; /* supprime le soulignement */
+no-link-style {
+  color: var(--bleu-ocean);
+  text-decoration: none;
+}
+
+.no-link-style:hover {
+  text-decoration: underline;
+  color: #var(--beige-sable);
 }
 
 .menu-toggle {
@@ -190,7 +195,6 @@ nav a:hover {
 .map-section h2 {
   color: var(--bleu-ocean);        /* reprend ta couleur or */
   margin-bottom: 15px;                 /* espace sous le titre */
-  padding: 10px;20px
 }
 
 .map-section p {
@@ -221,6 +225,11 @@ section h2 {
   text-align: center;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
+.welcome-section { 
+  text-align: center;
+  padding: 1px 15px;
+  color: var(--or);
+}
 
 h1, h2 { margin-top: 40px; }
 
@@ -228,7 +237,7 @@ h1, h2 { margin-top: 40px; }
 .menu-section {
   /* background: var(--vert-basilic); */
   color: var(--beige-sable);
-  padding: 10px 20px;
+  padding: 1px 20px;
   border-radius: 15px;
   /* box-shadow: 0 4px 15px rgba(0,0,0,0.6); */
 } 
@@ -613,10 +622,10 @@ footer {
   p, .site-text { font-size: 0.8rem; }
 
   .site-title {
-    margin-bottom: 35px; /* plus d'espace que sur desktop */
+    margin-bottom: 35px;
   }
-
- /* Bannière réduite */
+  
+  /* Bannière réduite */
   header.banner img {
     height: 70px;
     width: 100%;
@@ -624,21 +633,18 @@ footer {
     display: block;
   }
 
- /* Menu collé à la bannière */
   nav { top: 70px; }
 
-  body { padding-top: 100px; padding-bottom: 50px; }
+  body { padding-top: 100px; padding-bottom: 0px; }
 
-  footer {
-    padding: 6px 10px;
-    font-size: 0.6rem;
-    width: 100%;
-    margin: 0 auto;
-    border-radius: 8px;
+  footer { 
+    padding: 6px 10px; 
+    font-size: 0.6rem; 
+    width: 100%; 
+    margin: 20px auto 0 auto; 
+    border-radius: 8px; 
   }
 
-
-/* Contact réduit */
   .contact-card {
     max-width: 90%;
     padding: 10px 8px;
@@ -646,7 +652,24 @@ footer {
     margin: 0 auto;
   }
 
-  .contact-row { flex-direction: column; align-items:center; gap:12px; }
+  .contact-row {
+    flex-direction: row;        /* champs côte à côte */
+    justify-content: center;    /* centre horizontalement les champs ensemble */
+    align-items: flex-start;    /* alignement vertical au top */
+    gap: 12px;                  /* espace entre les champs */
+    flex-wrap: wrap;            /* permet de passer à la ligne si écran trop petit */
+  }
+
+  .contact-row .field {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  justify-content: center;
+}
+
+  .contact-row .field {
+  flex: 0 0 45%;              /* largeur exacte du champ */
+}
 
   .contact-form { display:flex; flex-direction:column; align-items:center; gap:12px; }
 
@@ -660,14 +683,25 @@ footer {
     box-sizing: border-box;
   }
 
-  .field.email-field,
-  .field.message-field textarea { width: 90% !important; }
-
-  .menu-toggle {
-    display: none !important;
+/* Email */
+  .field.email-field {
+    width: 95% !important;
   }
 
-/* Menu links wrap + spacing */
+  /* Message */
+  .field.message-field {
+    width: 95%;       /* largeur du bloc parent */
+    margin: 0 auto;   /* centre le bloc */
+  }
+
+  .field.message-field textarea {
+    width: 90%;      /* prend toute la largeur du parent centré */
+    min-height: 180px;
+    display: block;   /* pour s’assurer que margin fonctionne si nécessaire */
+  }
+
+  .menu-toggle { display: none !important; }
+
   .menu-links {
     display: flex;
     flex-wrap: wrap;
@@ -681,7 +715,111 @@ footer {
     margin: 0;
   }
 
-/* Images cliquables (mobile) */
+  .featured-dish img,
+  .card img,
+  .gallery img {
+    max-width: 60%;
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 576px) {
+  h1 { font-size: 1.2rem; }
+  h2 { font-size: 1rem; }
+  h3 { font-size: 0.9rem; }
+  p, .site-text { font-size: 0.8rem; }
+
+  .site-title {
+    margin-bottom: 35px;
+  }
+  
+  /* Bannière réduite */
+  header.banner img {
+    height: 70px;
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+
+  nav { top: 70px; }
+
+  body { padding-top: 100px; padding-bottom: 0px; }
+
+  footer { 
+    padding: 6px 10px; 
+    font-size: 0.6rem; 
+    width: 100%; 
+    margin: 20px auto 0 auto; 
+    border-radius: 8px; 
+  }
+
+  .contact-card {
+    max-width: 90%;
+    padding: 10px 8px;
+    font-size: 0.85rem;
+    margin: 0 auto;
+  }
+
+  .contact-row {
+    width: 90%;
+    flex-direction: row;        /* champs côte à côte */
+    justify-content: center;    /* centre horizontalement les champs ensemble */
+    align-items: flex-start;    /* alignement vertical au top */
+    gap: 12px;                  /* espace entre les champs */
+    flex-wrap: wrap;            /* permet de passer à la ligne si écran trop petit */
+  }
+
+  .contact-row .field {
+    flex: 0 0 90%;              /* chaque champ occupe ~45% de la largeur du conteneur */
+    max-width: 400px;           /* largeur max pour les grands écrans */
+  }
+
+  .contact-form { display:flex; flex-direction:column; align-items:center; gap:12px; }
+
+  .contact-card input,
+  .contact-card textarea {
+    width: 90%;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    margin: 0 auto;
+    display: block;
+    box-sizing: border-box;
+  }
+
+/* Email */
+  .field.email-field {
+    width: 95% !important;
+  }
+
+  /* Message */
+  .field.message-field {
+    width: 95%;       /* largeur du bloc parent */
+    margin: 0 auto;   /* centre le bloc */
+  }
+
+  .field.message-field textarea {
+    width: 90%;      /* prend toute la largeur du parent centré */
+    min-height: 180px;
+    display: block;   /* pour s’assurer que margin fonctionne si nécessaire */
+  }
+
+  .menu-toggle { display: none !important; }
+
+  .menu-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 10px;
+  }
+
+  nav a {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    margin: 0;
+  }
+
   .featured-dish img,
   .card img,
   .gallery img {
