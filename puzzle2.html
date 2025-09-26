@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Puzzle interactif — La Pizz'À're</title>
+  <style>
+    html,body {
+      height:100%;
+      margin:0;
+      background:#F5F0E6;
+      display:block;
+      align-items:center;
+      justify-content:center;
+    }
+    canvas {
+      background:transparent;
+      display:flex;
+      border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.3);
+       padding: 15px 30px;
+      cursor:grab;
+    }
+    canvas:active { cursor:grabbing; }
+  </style>
+</head>
+<body>
+  <canvas id="puzzleCanvas" width="600" height="600"></canvas>
+
+<script>
+const IMG_SRC = "logo3d.png"; // ton image dans le même dossier
+const canvas = document.getElementById('puzzleCanvas');
+const ctx = canvas.getContext('2d', { alpha: true });
+
+let img = new Image();
+img.src = IMG_SRC;
+
+let pieces = [];
+let cols = 4, rows = 4;
+let pieceW, pieceH;
+let dragging = null, offsetX = 0, offsetY = 0;
+
+function buildPieces() {
+  pieces = [];
+  pieceW = Math.floor(img.width / cols);
+  pieceH = Math.floor(img.height / rows);
+  for(let r=0;r<rows;r++) {
+    for(let c=0;c<cols;c++) {
+      const sx = c*pieceW;
+      const sy = r*pieceH;
+      const sw = (c===cols-1) ? img.width - sx : pieceW;
+      const sh = (r===rows-1) ? img.height - sy : pieceH;
+      pieces.push({
+        sx, sy, sw, sh,
+        x: Math.random()*(canvas.width-150),
+        y: Math.random()*(canvas.height-150),
+        tx: c*(canvas.width/cols),
+        ty: r*(canvas.height/rows),
+        w: canvas.width/cols,
+        h: canvas.height/rows,
+        placed:false
+      });
+    }
+  }
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(const p of pieces) {
+    ctx.drawImage(img, p.sx, p.sy, p.sw, p.sh, p.x, p.y, p.w, p.h);
+    if(!p.placed) {
+      ctx.strokeStyle = "rgba(0,0,0,.2)";
+      ctx.strokeRect(p.x, p.y, p.w, p.h);
+    }
+  }
+}
+
+function isInside(piece, mx, my) {
+  return mx>piece.x && mx<piece.x+piece.w && my>piece.y && my<piece.y+piece.h;
+}
+
+canvas.addEventListener("mousedown", e=>{
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  for(let i=pieces.length-1;i>=0;i--){
+    const p=pieces[i];
+    if(isInside(p,mx,my) && !p.placed){
+      dragging=p;
+      offsetX=mx-p.x;
+      offsetY=my-p.y;
+      pieces.splice(i,1);
+      pieces.push(p); // bring to front
+      break;
+    }
+  }
+});
+
+canvas.addEventListener("mousemove", e=>{
+  if(dragging){
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    dragging.x = mx-offsetX;
+    dragging.y = my-offsetY;
+    draw();
+  }
+});
+
+canvas.addEventListener("mouseup", ()=>{
+  if(dragging){
+    // snap to target if close
+    if(Math.abs(dragging.x-dragging.tx)<20 && Math.abs(dragging.y-dragging.ty)<20){
+      dragging.x = dragging.tx;
+      dragging.y = dragging.ty;
+      dragging.placed = true;
+    }
+    dragging=null;
+    draw();
+  }
+});
+
+img.onload = ()=>{
+  buildPieces();
+  draw();
+};
+</script>
+</body>
+</html>

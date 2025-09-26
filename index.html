@@ -25,6 +25,13 @@
   </div>
 </nav>
 
+.iframe-container {
+  display: flex;
+  justify-content: center; /* centre horizontal */
+  align-items: center;     /* centre vertical */
+  min-height: calc(100vh - 200px); /* occupe la hauteur visible - bannière */
+}
+
 
 <main>
 <section class="welcome-section">
@@ -33,12 +40,15 @@
 
   <!-- Ajout du bloc avec fond noir comme sur le menu -->
   <div class="featured-dish home-featured">
-    <img src="images/boutique.jpg" alt="Boutique" class="show">
+    <img src="images/boutique.jpg" alt="Boutique" class="show"><
      <img src="images/boutique-2.jpg" alt="Boutique" class="show">
     <h3>Notre Boutique</h3>
     <p>Un lieu convivial pour savourer nos spécialités.</p>
+     <div class="featured-dish"><iframe src="puzzle2.html" width="600" height="600"></iframe></div>
+     <h3>Essayez notre puzzle interactif pour découvrir le logo 3D !</h3>
   </div>
 </section>
+
 
 <h1 class="site-title-bas">La PiZz&rsquo; A r&eacute</h1>
 
