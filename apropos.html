@@ -8,16 +8,16 @@
   <img src="images/banner.jpg" alt="Bannière">
 </header>
 
-<<nav>
+<nav class="nav bg-marbre"
   <button class="menu-toggle" onclick="toggleMenu()">☰</button>
   <div class="menu-links">
     <a href="index.html">Accueil</a>
-    <a href="traiteur.html" class="active">Traiteur</a> <!-- ✅ nouvel onglet -->
+    <a href="traiteur.html">Traiteur</a>
     <a href="pizza.html">Les pizzas</a>
     <a href="menu.html">La carte</a>
     <a href="galerie.html">Galerie</a>
     <a href="contact.html">Contact</a>
-    <a href="apropos.html">À propos</a>
+    <a href="apropos.html" class="active">À propos</a>
   </div>
 </nav>
 
@@ -50,26 +50,28 @@
 <h1 class="site-title-bas">La PiZz&rsquo; A r&eacute</h1>
 </main>
 
-<footer>
-   <p>© 2025 La PiZz’ A ré - Tous droits réservés - Webdesigner : Francis Glavieux</p>
-   <div class="footer-links">
-     <a href="confidentialite.html">Politique de confidentialité</a>
-     <a href="mentions-legales.html">Mentions légales</a>
-   <div class="social-links">
-     <a href="https://www.facebook.com/profile.php?id=100063309090268" target="_blank" aria-label="Facebook">
-       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
-         <path d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.351C0 23.4.6 24 1.325 
-         24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 
-         1.893-4.788 4.659-4.788 1.325 0 2.463.099 
-         2.794.143v3.24h-1.918c-1.505 0-1.797.716-1.797 
-         1.765v2.314h3.587l-.467 3.622h-3.12V24h6.116C23.4 
-         24 24 23.4 24 22.676V1.325C24 .6 23.4 0 
-         22.675 0z"/>
-       </svg>
-     </a>
-   </div>
+
+<footer class="bg-marbre-footer" 
+        style="--marbre-speed:0.6; --marbre-opacity-speed:0.08; --marbre-opacity-min:0.5; --marbre-opacity-max:1;">
+  <p>© 2025 La PiZz&rsquo; A r&eacute; - Tous droits réservés - Webdesigner : Francis Glavieux</p>
+  <div class="social-links">
+    <a href="confidentialite.html">Politique de confidentialité</a>
+    <a href="mentions-legales.html">Mentions légales</a>
+    <a href="https://www.facebook.com/profile.php?id=100063309090268" target="_blank" aria-label="Facebook">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M22.675 0h-21.35C.6 0 0 .6 0 1.325v21.351C0 23.4.6 24 1.325 
+        24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 
+        1.893-4.788 4.659-4.788 1.325 0 2.463.099 
+        2.794.143v3.24h-1.918c-1.505 0-1.797.716-1.797 
+        1.765v2.314h3.587l-.467 3.622h-3.12V24h6.116C23.4 
+        24 24 23.4 24 22.676V1.325C24 .6 23.4 0 
+        22.675 0z"/>
+      </svg>
+    </a>
+  </div>
 </footer>
 
 <script src="script.js?v=4.0" defer></script>
 
-</body></html>
+</body>
+</html>

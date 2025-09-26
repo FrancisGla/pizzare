@@ -385,3 +385,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener('resize', () => { if (clone) closeZoom(true); });
 });
+
+// Sélectionne tous les éléments avec la classe .bg-marbre
+const animatedElements = document.querySelectorAll('.bg-marbre');
+
+animatedElements.forEach(el => {
+  let posX = 50, dirX = 1;
+  let posY = 50, dirY = 1;
+  let opacity = 0.95, dirOpacity = 1;
+
+  // Variation des nuages
+  let cloudScale = 100; // pourcentage
+  let dirCloud = 1;
+  const cloudSpeed = Math.random() * 0.1 + 0.02; // vitesse nuages
+
+  // Vitesse aléatoire des déplacements
+  const speedX = (Math.random() * 0.3 + 0.05).toFixed(3);
+  const speedY = (Math.random() * 0.25 + 0.05).toFixed(3);
+  const opacitySpeed = (Math.random() * 0.002 + 0.001).toFixed(4);
+
+  // Opacité min/max
+  const opacityMin = 0.9 + Math.random() * 0.05;
+  const opacityMax = 1;
+
+  // Variation de teinte
+  let hueShift = Math.random() * 20 - 10;
+  let hueDir = 1;
+
+  function animate() {
+    // Déplacement horizontal/vertical
+    posX += speedX * dirX;
+    if (posX > 100 || posX < 0) dirX *= -1;
+
+    posY += speedY * dirY;
+    if (posY > 100 || posY < 0) dirY *= -1;
+
+    // Variation d’opacité
+    opacity += opacitySpeed * dirOpacity;
+    if (opacity > opacityMax || opacity < opacityMin) dirOpacity *= -1;
+
+    // Variation de teinte
+    hueShift += 0.02 * hueDir;
+    if (hueShift > 15 || hueShift < -15) hueDir *= -1;
+
+    // "Respiration" des nuages
+    cloudScale += cloudSpeed * dirCloud;
+    if (cloudScale > 120 || cloudScale < 90) dirCloud *= -1;
+
+    // Application
+    el.style.backgroundPosition = `${posX}% ${posY}%`;
+    el.style.opacity = opacity;
+    el.style.filter = `hue-rotate(${hueShift}deg)`;
+    el.style.backgroundSize = `${cloudScale}% ${cloudScale}%`;
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+});
+
