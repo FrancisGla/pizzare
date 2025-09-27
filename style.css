@@ -306,6 +306,17 @@ h1, h2 { margin-top: 40px; }
   max-width: 900px;
   color: var(--bleu-ocean);
 }
+.featured-dish iframe {
+  margin: 30px auto;
+  text-align: center;
+  background: var(--beige-sable);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  max-width: 900px;
+  color: var(--bleu-ocean);
+}
+
 
 .featured-dish img {
   max-width: 600px;
@@ -749,6 +760,13 @@ footer {
     transition: transform 0.3s ease;
     cursor: zoom-in;
   }
+  /* Pour ton iframe */
+iframe {
+  width: 100%;
+  max-width: 600px;
+  border: none;
+  aspect-ratio: 1/1;
+}
 }
 
 /* ===== Responsive ===== */
@@ -854,4 +872,11 @@ footer {
     transition: transform 0.3s ease;
     cursor: zoom-in;
   }
+  /* Pour ton iframe */
+iframe {
+  width: 100%;
+  max-width: 350px;
+  border: none;
+  aspect-ratio: 1/1;
+}
 }

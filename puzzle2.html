@@ -13,14 +13,17 @@
       align-items:center;
       justify-content:center;
     }
-    canvas {
-      background:transparent;
-      display:flex;
-      border-radius:12px;
-      box-shadow:0 10px 30px rgba(0,0,0,.3);
-       padding: 15px 30px;
-      cursor:grab;
-    }
+   canvas {
+  background:transparent;
+  display:block;      /* au lieu de flex */
+  width: 100%;         /* ✅ responsive */
+  height: auto;        /* ✅ garde les proportions */
+  max-width: 600px;    /* ✅ limite sur grands écrans */
+  aspect-ratio: 1/1;   /* ✅ évite les déformations */
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  cursor:grab;
+}
     canvas:active { cursor:grabbing; }
   </style>
 </head>
@@ -121,9 +124,15 @@ canvas.addEventListener("mouseup", ()=>{
 });
 
 img.onload = ()=>{
+  // Ajuste la taille du canvas selon l'écran
+  const size = Math.min(window.innerWidth, window.innerHeight, 600);
+  canvas.width = size;
+  canvas.height = size;
+
   buildPieces();
   draw();
 };
+
 </script>
 </body>
 </html>
