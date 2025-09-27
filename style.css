@@ -27,6 +27,8 @@
   --noir-ardoise: #333333;     /* Texte principal */
   --bleu-ocean-marine: #014F86;
   --bandeau: #014F86;
+  --animation: #aca69b;
+
 }
 
 /* ===== Reset global ===== */
@@ -316,7 +318,12 @@ h1, h2 { margin-top: 40px; }
   max-width: 900px;
   color: var(--bleu-ocean);
 }
-
+.iframe-container {
+  display: flex;
+  justify-content: center; /* centre horizontal */
+  align-items: center;     /* centre vertical */
+  min-height: calc(100vh - 200px); /* occupe la hauteur visible - bannière */
+}
 
 .featured-dish img {
   max-width: 600px;
