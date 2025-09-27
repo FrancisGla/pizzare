@@ -9,7 +9,7 @@
       height:100%;
       margin:0;
       background:#F5F0E6;
-      display:block;
+      display:flex;
       align-items:center;
       justify-content:center;
     }
@@ -19,6 +19,7 @@
       width: 100%;
       height: auto;
       max-width: 600px;
+      aspect-ratio: 1/1;
       border-radius:12px;
       box-shadow:0 10px 30px rgba(0,0,0,.3);
       cursor:grab;
@@ -42,6 +43,12 @@ let cols = 4, rows = 4;
 let pieceW, pieceH;
 let dragging = null, offsetX = 0, offsetY = 0;
 
+function resizeCanvas() {
+  const size = Math.min(window.innerWidth, window.innerHeight, 600);
+  canvas.width = size;
+  canvas.height = size;
+}
+
 function buildPieces() {
   pieces = [];
   pieceW = Math.floor(img.width / cols);
@@ -52,19 +59,14 @@ function buildPieces() {
       const sy = r*pieceH;
       const sw = (c===cols-1) ? img.width - sx : pieceW;
       const sh = (r===rows-1) ? img.height - sy : pieceH;
-
-      const targetW = canvas.width/cols;
-      const targetH = canvas.height/rows;
-
       pieces.push({
         sx, sy, sw, sh,
-        // ✅ Apparition toujours dans la zone visible
-        x: Math.random() * (canvas.width - targetW),
-        y: Math.random() * (canvas.height - targetH),
-        tx: c * targetW,
-        ty: r * targetH,
-        w: targetW,
-        h: targetH,
+        x: Math.random()*(canvas.width-150),
+        y: Math.random()*(canvas.height-150),
+        tx: c*(canvas.width/cols),
+        ty: r*(canvas.height/rows),
+        w: canvas.width/cols,
+        h: canvas.height/rows,
         placed:false
       });
     }
@@ -86,109 +88,71 @@ function isInside(piece, mx, my) {
   return mx>piece.x && mx<piece.x+piece.w && my>piece.y && my<piece.y+piece.h;
 }
 
-// ✅ Empêche la sortie du canvas
-function clampPiece(p) {
-  p.x = Math.max(0, Math.min(p.x, canvas.width - p.w));
-  p.y = Math.max(0, Math.min(p.y, canvas.height - p.h));
+function onPointerDown(e) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.touches? e.touches[0].clientX: e.clientX) - rect.left;
+  const my = (e.touches? e.touches[0].clientY: e.clientY) - rect.top;
+  for(let i=pieces.length-1;i>=0;i--){
+    const p=pieces[i];
+    if(isInside(p,mx,my) && !p.placed){
+      dragging=p;
+      offsetX=mx-p.x;
+      offsetY=my-p.y;
+      pieces.splice(i,1);
+      pieces.unshift(p); // On place les pièces actives au-dessus
+      break;
+    }
+  }
 }
 
-// ---- Souris ----
-canvas.addEventListener("mousedown", e=>{
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-  for(let i=pieces.length-1;i>=0;i--){
-    const p=pieces[i];
-    if(isInside(p,mx,my) && !p.placed){
-      dragging=p;
-      offsetX=mx-p.x;
-      offsetY=my-p.y;
-      pieces.splice(i,1);
-      pieces.push(p);
-      break;
-    }
-  }
-});
-
-canvas.addEventListener("mousemove", e=>{
+function onPointerMove(e) {
   if(dragging){
     const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+    const mx = (e.touches? e.touches[0].clientX: e.clientX) - rect.left;
+    const my = (e.touches? e.touches[0].clientY: e.clientY) - rect.top;
     dragging.x = mx-offsetX;
     dragging.y = my-offsetY;
-    clampPiece(dragging);
     draw();
   }
-});
+}
 
-canvas.addEventListener("mouseup", ()=>{
+function onPointerUp() {
   if(dragging){
     if(Math.abs(dragging.x-dragging.tx)<20 && Math.abs(dragging.y-dragging.ty)<20){
       dragging.x = dragging.tx;
       dragging.y = dragging.ty;
       dragging.placed = true;
+
+      // ✅ Pièce placée envoyée derrière les autres
+      const index = pieces.indexOf(dragging);
+      if (index > -1) {
+        const donePiece = pieces.splice(index,1)[0];
+        pieces.push(donePiece);
+      }
     }
     dragging=null;
     draw();
   }
-});
+}
 
-// ---- Événements tactiles ----
-canvas.addEventListener("touchstart", e=>{
-  const touch = e.touches[0];
-  const rect = canvas.getBoundingClientRect();
-  const mx = touch.clientX - rect.left;
-  const my = touch.clientY - rect.top;
-  for(let i=pieces.length-1;i>=0;i--){
-    const p=pieces[i];
-    if(isInside(p,mx,my) && !p.placed){
-      dragging=p;
-      offsetX=mx-p.x;
-      offsetY=my-p.y;
-      pieces.splice(i,1);
-      pieces.push(p);
-      break;
-    }
-  }
-});
-
-canvas.addEventListener("touchmove", e=>{
-  if(dragging){
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    const mx = touch.clientX - rect.left;
-    const my = touch.clientY - rect.top;
-    dragging.x = mx-offsetX;
-    dragging.y = my-offsetY;
-    clampPiece(dragging);
-    draw();
-  }
-}, { passive: false });
-
-canvas.addEventListener("touchend", ()=>{
-  if(dragging){
-    if(Math.abs(dragging.x-dragging.tx)<20 && Math.abs(dragging.y-dragging.ty)<20){
-      dragging.x = dragging.tx;
-      dragging.y = dragging.ty;
-      dragging.placed = true;
-    }
-    dragging=null;
-    draw();
-  }
-});
+canvas.addEventListener("mousedown", onPointerDown);
+canvas.addEventListener("mousemove", onPointerMove);
+canvas.addEventListener("mouseup", onPointerUp);
+canvas.addEventListener("touchstart", onPointerDown, {passive:false});
+canvas.addEventListener("touchmove", onPointerMove, {passive:false});
+canvas.addEventListener("touchend", onPointerUp);
 
 img.onload = ()=>{
-  const size = Math.min(window.innerWidth, window.innerHeight, 600);
-  canvas.width = size;
-  canvas.height = size;
-  canvas.style.width = size + "px";
-  canvas.style.height = size + "px";
-
+  resizeCanvas();
   buildPieces();
   draw();
 };
+
+window.addEventListener("resize", ()=>{
+  resizeCanvas();
+  buildPieces();
+  draw();
+});
 </script>
 </body>
 </html>
