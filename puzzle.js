@@ -24,9 +24,17 @@ function unlockScroll() {
 }
 
 function keepInsideCanvas(piece) {
-  piece.x = Math.max(0, Math.min(piece.x, canvas.width - piece.w));
-  piece.y = Math.max(0, Math.min(piece.y, canvas.height - piece.h));
+  const rect = canvas.getBoundingClientRect(); // taille visible
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+
+  const maxX = canvas.width - piece.w;
+  const maxY = canvas.height - piece.h;
+
+  piece.x = Math.max(0, Math.min(piece.x, maxX));
+  piece.y = Math.max(0, Math.min(piece.y, maxY));
 }
+
 
 function buildPieces() {
   pieces = [];
@@ -141,9 +149,11 @@ canvas.addEventListener("touchmove", e => {
 canvas.addEventListener("touchend", stopDrag);
 
 img.onload = () => {
-  const size = Math.min(window.innerWidth, window.innerHeight, 600);
+  const rect = canvas.getBoundingClientRect();
+  const size = Math.min(rect.width, rect.height);
   canvas.width = size;
   canvas.height = size;
   buildPieces();
   draw();
 };
+
