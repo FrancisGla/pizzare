@@ -318,12 +318,6 @@ h1, h2 { margin-top: 40px; }
   max-width: 900px;
   color: var(--bleu-ocean);
 }
-.iframe-container {
-  display: flex;
-  justify-content: center; /* centre horizontal */
-  align-items: center;     /* centre vertical */
-  min-height: calc(100vh - 200px); /* occupe la hauteur visible - bannière */
-}
 
 .featured-dish img {
   max-width: 600px;
@@ -343,6 +337,24 @@ h1, h2 { margin-top: 40px; }
   opacity: 1;
   transform: scale(1) rotate(0);
 }
+
+.puzzle-container {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.puzzle-container canvas {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  background: var(--beige-sable);
+  aspect-ratio: 1/1;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+  cursor: grab;
+}
+
 
 /* ===== Cartes ===== */
 .card {
@@ -767,13 +779,6 @@ footer {
     transition: transform 0.3s ease;
     cursor: zoom-in;
   }
-  /* Pour ton iframe */
-iframe {
-  width: 100%;
-  max-width: 600px;
-  border: none;
-  aspect-ratio: 1/1;
-}
 }
 
 /* ===== Responsive ===== */
@@ -879,11 +884,8 @@ iframe {
     transition: transform 0.3s ease;
     cursor: zoom-in;
   }
-  /* Pour ton iframe */
-iframe {
-  width: 100%;
-  max-width: 350px;
-  border: none;
-  aspect-ratio: 1/1;
-}
+  .puzzle-container canvas {
+    max-width: 350px;
+  }
+
 }
