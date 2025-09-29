@@ -1,3 +1,4 @@
+
 const IMG_SRC = "logo3d.png";
 const canvas = document.getElementById('puzzleCanvas');
 const ctx = canvas.getContext('2d', { alpha: true });
@@ -7,7 +8,6 @@ img.src = IMG_SRC;
 
 let pieces = [];
 let cols = 4, rows = 4;
-let pieceW, pieceH;
 let dragging = null, offsetX = 0, offsetY = 0;
 let scrollLocked = false;
 
@@ -23,23 +23,18 @@ function unlockScroll() {
   scrollLocked = false;
 }
 
+/* Empêche les pièces de sortir du cadre */
 function keepInsideCanvas(piece) {
-  const rect = canvas.getBoundingClientRect(); // taille visible
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-
   const maxX = canvas.width - piece.w;
   const maxY = canvas.height - piece.h;
-
   piece.x = Math.max(0, Math.min(piece.x, maxX));
   piece.y = Math.max(0, Math.min(piece.y, maxY));
 }
 
-
 function buildPieces() {
   pieces = [];
-  pieceW = Math.floor(img.width / cols);
-  pieceH = Math.floor(img.height / rows);
+  const pieceW = Math.floor(img.width / cols);
+  const pieceH = Math.floor(img.height / rows);
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -50,8 +45,8 @@ function buildPieces() {
 
       const p = {
         sx, sy, sw, sh,
-        x: Math.random() * (canvas.width - canvas.width / cols),
-        y: Math.random() * (canvas.height - canvas.height / rows),
+        x: Math.random() * (canvas.width - (canvas.width / cols)),
+        y: Math.random() * (canvas.height - (canvas.height / rows)),
         tx: c * (canvas.width / cols),
         ty: r * (canvas.height / rows),
         w: canvas.width / cols,
@@ -73,7 +68,8 @@ function draw() {
 }
 
 function isInside(piece, mx, my) {
-  return mx > piece.x && mx < piece.x + piece.w && my > piece.y && my < piece.y + piece.h;
+  return mx > piece.x && mx < piece.x + piece.w &&
+         my > piece.y && my < piece.y + piece.h;
 }
 
 function startDrag(mx, my) {
@@ -116,21 +112,21 @@ function stopDrag() {
   }
 }
 
+/* Souris */
 canvas.addEventListener("mousedown", e => {
   const rect = canvas.getBoundingClientRect();
   startDrag(e.clientX - rect.left, e.clientY - rect.top);
 });
-
 canvas.addEventListener("mousemove", e => {
   if (dragging) {
     const rect = canvas.getBoundingClientRect();
     moveDrag(e.clientX - rect.left, e.clientY - rect.top);
   }
 });
-
 canvas.addEventListener("mouseup", stopDrag);
 canvas.addEventListener("mouseleave", stopDrag);
 
+/* Tactile */
 canvas.addEventListener("touchstart", e => {
   const rect = canvas.getBoundingClientRect();
   const touch = e.touches[0];
@@ -148,6 +144,7 @@ canvas.addEventListener("touchmove", e => {
 
 canvas.addEventListener("touchend", stopDrag);
 
+/* Chargement */
 img.onload = () => {
   const rect = canvas.getBoundingClientRect();
   const size = Math.min(rect.width, rect.height);
@@ -156,4 +153,3 @@ img.onload = () => {
   buildPieces();
   draw();
 };
-
